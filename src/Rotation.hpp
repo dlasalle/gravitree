@@ -9,8 +9,8 @@
 
 
 
-#ifndef ORBITREE_ROTATION_HPP
-#define ORBITREE_ROTATION_HPP
+#ifndef GRAVITREE_ROTATION_HPP
+#define GRAVITREE_ROTATION_HPP
 
 #include "Vector3D.hpp"
 #include "Types.hpp"

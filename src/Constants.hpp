@@ -9,8 +9,8 @@
 
 
 
-#ifndef ORBITREE_CONSTANTS_HPP
-#define ORBITREE_CONSTANTS_HPP
+#ifndef GRAVITREE_CONSTANTS_HPP
+#define GRAVITREE_CONSTANTS_HPP
 
 namespace gravitree
 {

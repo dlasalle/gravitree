@@ -8,11 +8,30 @@
 */
 
 #include "KeplerOrbit.hpp"
+#include "Gravity.hpp"
 #include "Constants.hpp"
 #include <cmath>
 
 namespace gravitree
 {
+
+/******************************************************************************
+* HELPER FUNCTIONS ************************************************************
+******************************************************************************/
+
+namespace
+{
+
+double calcPeriod(
+    meter_type const semimajorAxis,
+    kilo_type const parentMass)
+{
+  double const a3 = semimajorAxis*semimajorAxis*semimajorAxis;
+  double const mu = Gravity::G * parentMass;
+  return 2.0*Constants::PI*std::sqrt(a3/mu);
+}
+
+}
 
 /******************************************************************************
 * CONSTRUCTORS / DESTRUCTOR ***************************************************
@@ -24,13 +43,15 @@ KeplerOrbit::KeplerOrbit(
     radian_type const inclination,
     radian_type const longitudeOfAscendingNode,
     radian_type const argumentOfPeriapsis,
-    second_type const period) :
+    kilo_type const parentMass) :
   m_semimajorAxis(semimajorAxis),
   m_eccentricity(eccentricity),
   m_inclination(inclination),
   m_longitudeOfAscendingNode(longitudeOfAscendingNode),
   m_argumentOfPeriapsis(argumentOfPeriapsis),
-  m_period(period)
+  m_parentMass(parentMass),
+  m_period(calcPeriod(semimajorAxis, parentMass)),
+  m_mu(parentMass*Gravity::G)
 {
   // do nothing
 }
@@ -69,20 +90,14 @@ radian_type KeplerOrbit::argumentOfPeriapsis() const
   return m_argumentOfPeriapsis;
 }
 
+kilo_type KeplerOrbit::parentMass() const
+{
+  return m_parentMass;
+}
+
 second_type KeplerOrbit::period() const
 {
   return m_period;
-}
-
-meter_type KeplerOrbit::altitude(
-    radian_type trueAnomally) const
-{
-  double const num = m_semimajorAxis * ( 1 - m_eccentricity*m_eccentricity);
-  double const cosOfAnomally = std::cos(trueAnomally);
-  double const den = 1 + m_eccentricity * cosOfAnomally;
-  // TODO: handle eccentricity >= 1
-
-  return num / den;
 }
 
 meter_type KeplerOrbit::apoapsis() const
@@ -95,10 +110,15 @@ meter_type KeplerOrbit::periapsis() const
   return altitude(0);
 }
 
-radian_type KeplerOrbit::tangent(
-    radian_type const trueAnomally) const
+meter_type KeplerOrbit::altitude(
+    radian_type trueAnomally) const
 {
-  return m_argumentOfPeriapsis + trueAnomally;
+  double const num = m_semimajorAxis * ( 1 - m_eccentricity*m_eccentricity);
+  double const cosOfAnomally = std::cos(trueAnomally);
+  double const den = 1 + m_eccentricity * cosOfAnomally;
+  // TODO: handle eccentricity >= 1
+
+  return num / den;
 }
 
 mps_type KeplerOrbit::velocity(

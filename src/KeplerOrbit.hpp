@@ -9,8 +9,8 @@
 
 
 
-#ifndef ORBITREE_KEPLERORBIT_HPP
-#define ORBITREE_KEPLERORBIT_HPP
+#ifndef GRAVITREE_KEPLERORBIT_HPP
+#define GRAVITREE_KEPLERORBIT_HPP
 
 #include "Types.hpp"
 
@@ -30,7 +30,7 @@ class KeplerOrbit
     * @param longitudeOfAscendingNode The position of the ascending node
     * (omega).
     * @param argumentOfPeriapsis The argument of periapsis (w).
-    * @param period The period of the orbit.
+    * @param parentMass The mass of the parent body. 
     */
     KeplerOrbit(
         meter_type semimajorAxis,
@@ -38,7 +38,7 @@ class KeplerOrbit
         radian_type inclination,
         radian_type longitudeOfAscendingNode,
         radian_type argumentOfPeriapsis,
-        second_type period);
+        kilo_type parentMass);
 
     /**
     * @brief Get the length of the semimajor axis.
@@ -77,6 +77,13 @@ class KeplerOrbit
     radian_type argumentOfPeriapsis() const;
 
     /**
+    * @brief Get the mass of the parent body which is being orbited..
+    *
+    * @return The mass in kg.
+    */
+    kilo_type parentMass() const;
+
+    /**
     * @brief Get the period of the orbit.
     *
     * @return The period in seconds.
@@ -96,17 +103,6 @@ class KeplerOrbit
     * @return The distance in meters.
     */
     meter_type periapsis() const;
-
-    /**
-    * @brief Get the angle between the tangent of the velocity and the focal
-    * point of the orbit.
-    *
-    * @param trueAnomally The true anomally.
-    *
-    * @return The tangent angle.
-    */
-    radian_type tangent(
-        radian_type trueAnomally) const;
 
     /**
     * @brief Get the distance from the focal point at the given position.
@@ -134,7 +130,11 @@ class KeplerOrbit
     radian_type m_inclination;
     radian_type m_longitudeOfAscendingNode;
     radian_type m_argumentOfPeriapsis;
+    kilo_type m_parentMass;
+
+    // derived parameters
     second_type m_period;
+    double m_mu;
 };
 
 }

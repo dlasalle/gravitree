@@ -9,8 +9,8 @@
 
 
 
-#ifndef ORBITREE_POSITION_HPP
-#define ORBITREE_POSITION_HPP
+#ifndef GRAVITREE_POSITION_HPP
+#define GRAVITREE_POSITION_HPP
 
 #include "Vector3D.hpp"
 #include "Types.hpp"

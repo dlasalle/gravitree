@@ -9,8 +9,8 @@
 
 
 
-#ifndef ORBITREE_TYPES_HPP
-#define ORBITREE_TYPES_HPP
+#ifndef GRAVITREE_TYPES_HPP
+#define GRAVITREE_TYPES_HPP
 
 namespace gravitree
 {

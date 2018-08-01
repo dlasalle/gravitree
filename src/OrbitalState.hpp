@@ -9,8 +9,8 @@
 
 
 
-#ifndef ORBITREE_ORBITALSTATE_HPP
-#define ORBITREE_ORBITALSTATE_HPP
+#ifndef GRAVITREE_ORBITALSTATE_HPP
+#define GRAVITREE_ORBITALSTATE_HPP
 
 #include "KeplerOrbit.hpp"
 
@@ -36,26 +36,26 @@ class OrbitalState
     ~OrbitalState();
 
     /**
-    * @brief Get the components of the velocity of this object.
+    * @brief Get the components of the velocity of this object relative to the
+    * body it orbits.
     *
     * @return The velocity components.
     */
     Vector3D velocity() const noexcept;
 
     /**
-    * @brief Get the angle between the tangent of the velocity and the focal
-    * point of the orbit.
+    * @brief Get the position of this object relative to the body it orbits.
     *
-    * @return The tangent angle.
+    * @return The position.
     */
-    radian_type tangent() const noexcept;
+    Vector3D position() const noexcept;
 
     /**
     * @brief The distance of the orbit from the focal point in meters.
     *
-    * @return The altitude.
+    * @return The distance from the center of the body being orbited.
     */
-    meter_type altitude() const noexcept;
+    meter_type distance() const noexcept;
 
   private:
     KeplerOrbit m_orbit;

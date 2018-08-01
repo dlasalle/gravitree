@@ -9,8 +9,8 @@
 
 
 
-#ifndef ORBITREE_GRAVITY_HPP
-#define ORBITREE_GRAVITY_HPP
+#ifndef GRAVITREE_GRAVITY_HPP
+#define GRAVITREE_GRAVITY_HPP
 
 
 #include "Body.hpp"

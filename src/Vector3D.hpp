@@ -9,8 +9,8 @@
 
 
 
-#ifndef ORBITREE_VECTOR3D_HPP
-#define ORBITREE_VECTOR3D_HPP
+#ifndef GRAVITREE_VECTOR3D_HPP
+#define GRAVITREE_VECTOR3D_HPP
 
 
 #include <cmath>
