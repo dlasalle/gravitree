@@ -42,25 +42,32 @@ UNITTEST(KeplerOrbit, gettersTest)
       2.0*Constants::PI*std::sqrt((1e10*1e10*1e10)/(Gravity::G*1e12)));
 }
 
-UNITTEST(KeplerOrbit, velocityEarthTest)
+UNITTEST(KeplerOrbit, periapsisTest)
 {
   KeplerOrbit orbit(1.496e11, 0.01671022, deg2rad(7.155),
       deg2rad(-11.26064), 0.0, 1.98847e30);
   
-  // test earth min, max, and average velocities
-  mps_type vel = 0.0;
-  for (int i = 0; i < 256; ++i) {
-    double const curVel = orbit.velocity((i/128.0)*Constants::PI);
-    testLess(curVel, 30290);
-    testGreater(curVel, 29290);
-    vel += curVel;
-  }
-  vel /= 256;
-
-  testNearEqual(vel, 29780, 1e-3, 1e-2);
+  testNearEqual(orbit.periapsis(), 1.47095e11, 1e-3, 1e-2);
 }
 
 
+UNITTEST(KeplerOrbit, apoapsisTest)
+{
+  KeplerOrbit orbit(1.496e11, 0.01671022, deg2rad(7.155),
+      deg2rad(-11.26064), 0.0, 1.98847e30);
+  
+  testNearEqual(orbit.apoapsis(), 1.521e11, 1e-3, 1e-2);
+}
+
+UNITTEST(KeplerOrbit, angularMomentum)
+{
+  KeplerOrbit orbit(1.496e11, 0.01671022, deg2rad(7.155),
+      deg2rad(-11.26064), 0.0, 1.98847e30);
+
+  double const h = std::sqrt(orbit.mu() * orbit.semimajorAxis() * \
+      (1.0 - orbit.eccentricity()*orbit.eccentricity()));
+  testNearEqual(orbit.angularMomentum(), h, 1e-3, 1e-2);
+}
 
 
 }

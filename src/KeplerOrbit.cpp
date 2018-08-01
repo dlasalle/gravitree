@@ -100,36 +100,35 @@ second_type KeplerOrbit::period() const
   return m_period;
 }
 
+double KeplerOrbit::mu() const
+{
+  return m_mu;
+}
+
+double KeplerOrbit::angularMomentum() const
+{
+  double const e2 = m_eccentricity*m_eccentricity;
+  return std::sqrt(m_mu * m_semimajorAxis * (1.0 - e2));
+}
+
 meter_type KeplerOrbit::apoapsis() const
 {
-  return altitude(Constants::PI/2);
-}
+  if (m_eccentricity >= 1.0) {
+    return INFINITY; 
+  }
 
-meter_type KeplerOrbit::periapsis() const
-{
-  return altitude(0);
-}
-
-meter_type KeplerOrbit::altitude(
-    radian_type trueAnomally) const
-{
   double const num = m_semimajorAxis * ( 1 - m_eccentricity*m_eccentricity);
-  double const cosOfAnomally = std::cos(trueAnomally);
-  double const den = 1 + m_eccentricity * cosOfAnomally;
-  // TODO: handle eccentricity >= 1
+  double const den = 1 - m_eccentricity;
 
   return num / den;
 }
 
-mps_type KeplerOrbit::velocity(
-    radian_type const trueAnomally) const
+meter_type KeplerOrbit::periapsis() const
 {
-  double const a = 2.0 / altitude(trueAnomally);
-  double const b = 1.0 / m_semimajorAxis;
-  // mu = a**3 / (T / 2*pi)**2;
-  double const angularVelocity = m_period / (2.0 * Constants::PI);
-  double const smu = std::pow(m_semimajorAxis, 1.5) / angularVelocity;
-  return smu * std::sqrt(a-b);
+  double const num = m_semimajorAxis * ( 1 - m_eccentricity*m_eccentricity);
+  double const den = 1 + m_eccentricity;
+
+  return num / den;
 }
 
 }

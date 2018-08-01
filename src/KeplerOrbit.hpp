@@ -91,6 +91,20 @@ class KeplerOrbit
     second_type period() const;
 
     /**
+    * @brief Get the gravitation parameter GM.
+    *
+    * @return The parameter.
+    */
+    double mu() const;
+
+    /**
+    * @brief Get the angular momentum of the orbit.
+    *
+    * @return The angular momentum.
+    */
+    double angularMomentum() const;
+
+    /**
     * @brief Get the distance of the apoapsis from the focal point.
     *
     * @return The distance in meters.
@@ -103,26 +117,6 @@ class KeplerOrbit
     * @return The distance in meters.
     */
     meter_type periapsis() const;
-
-    /**
-    * @brief Get the distance from the focal point at the given position.
-    *
-    * @param trueAnomally The true anomally of the position in radians.
-    *
-    * @return The distance in meters.
-    */
-    meter_type altitude(
-        radian_type trueAnomally) const;
-
-    /**
-    * @brief Get the velocity of the orbit at a given position.
-    *
-    * @param trueAnomally The true anomally of the position.
-    *
-    * @return The velocity in meters per second.
-    */
-    mps_type velocity(
-        radian_type trueAnomally) const;
 
   private:
     meter_type m_semimajorAxis;
