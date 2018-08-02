@@ -40,6 +40,7 @@ SolarSystem::SolarSystem(
 void SolarSystem::tick(
     second_type const seconds)
 {
+  m_time += seconds;
 }
 
 void SolarSystem::addBody(
@@ -48,6 +49,15 @@ void SolarSystem::addBody(
     Vector3D const velocity,
     std::string const parent)
 {
+  if (m_bodies.count(parent) == 0) {
+    throw UnknownBodyException(parent); 
+  }
+  node_struct * const parentNode = m_bodies.at(parent).get();
+
+  OrbitalState const state = OrbitalState::fromVectors( \
+      position, velocity, parentNode->body.mass());
+
+  addBody(body, state, parent);
 }
 
 void SolarSystem::addBody(
@@ -69,6 +79,25 @@ void SolarSystem::addBody(
 void SolarSystem::removeBody(
     std::string const name)
 {
+  node_struct * const node = m_bodies.at(name).get();
+  if (node->parent != nullptr) {
+    throw InvalidOperationException("Remove root");
+  }
+
+  Vector3D const offsetPos = node->state.position();
+  Vector3D const offsetVel = node->state.velocity();
+
+  for (node_struct * const child : node->children) {
+    Vector3D const pos = offsetPos + child->state.position();
+    Vector3D const vel = offsetVel + child->state.velocity();
+
+    child->state = OrbitalState::fromVectors(pos, vel, \
+        node->parent->body.mass());
+
+    node->parent->children.emplace_back(child);
+  }
+
+  m_bodies.erase(name); 
 }
 
 std::vector<std::pair<Body*, Vector3D>> SolarSystem::getSystemRelativeTo(

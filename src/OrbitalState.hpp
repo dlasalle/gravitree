@@ -22,6 +22,20 @@ class OrbitalState
 {
   public:
     /**
+    * @brief Create an orbital state from a given set of vector.
+    *
+    * @param position The position vector.
+    * @param velocity The velocity vector.
+    * @param mass The mass of the parent body.
+    *
+    * @return The orbital state.
+    */
+    static OrbitalState fromVectors(
+        Vector3D position,
+        Vector3D velocity,
+        kilo_type mass);
+        
+    /**
     * @brief Create a new orbital state.
     *
     * @param orbit The current orbit.

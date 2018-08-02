@@ -9,6 +9,7 @@
 
 #include "OrbitalState.hpp"
 #include "Constants.hpp"
+#include "Gravity.hpp"
 
 namespace gravitree
 {
@@ -59,6 +60,56 @@ double newtonsMethod(
 }
 
 }
+
+
+/******************************************************************************
+* PUBLIC STATIC METHODS *******************************************************
+******************************************************************************/
+
+OrbitalState OrbitalState::fromVectors(
+    Vector3D const position,
+    Vector3D const velocity,
+    kilo_type const parentMass)
+{
+  Vector3D const hVec = position.cross(velocity);
+  double const h = hVec.magnitude();
+
+  double const r = position.magnitude();
+  double const v = velocity.magnitude();
+
+  double const mu = parentMass * Gravity::G;
+
+  double const E = v*v*0.5 - (mu / r);
+
+  double const semimajorAxis = - 0.5 * mu / E;
+  double const eccentricity = std::sqrt(1.0-(h*h)/(semimajorAxis*mu));
+
+  double const cos_i = hVec.z() / h;
+  double const inclination = std::acos(cos_i);
+
+  double const sin_i = std::sin(inclination);
+
+  double const longitudeOfAscendingNode = std::atan2(hVec.x(), -hVec.y());
+  double const cos_W = std::cos(longitudeOfAscendingNode);
+  double const sin_W = std::sin(longitudeOfAscendingNode);
+
+  double const w_v = std::atan2( \
+      position.z() / sin_i, \
+      position.x() * cos_W + position.y() * sin_W);
+
+  double const p = semimajorAxis * (1.0 - eccentricity*eccentricity);
+
+  double const trueAnomally = std::atan2( \
+      std::sqrt(p/mu) * (position*position), p-r);
+
+  double const argumentOfPeriapsis = w_v - trueAnomally;
+
+  KeplerOrbit orbit(semimajorAxis, eccentricity, inclination,
+      longitudeOfAscendingNode, argumentOfPeriapsis, parentMass);
+
+  return OrbitalState(orbit, trueAnomally);
+}
+
 
 /******************************************************************************
 * CONSTRUCTORS / DESTRUCTOR ***************************************************

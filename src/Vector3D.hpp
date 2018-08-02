@@ -118,10 +118,26 @@ class Vector3D
     *
     * @return The result.
     */
-    inline Vector3D operator*(
+    inline double operator*(
         Vector3D const & other) const noexcept
     {
-      return Vector3D(m_x*other.m_x, m_y*other.m_y, m_z*other.m_z);
+      return m_x*other.m_x + m_y*other.m_y + m_z*other.m_z;
+    }
+
+    /**
+    * @brief Perform the cross product between two vector.
+    *
+    * @param other The other vector.
+    *
+    * @return The cross product.
+    */
+    inline Vector3D cross(
+        Vector3D const & other) const noexcept
+    {
+      return Vector3D(
+          m_y*other.m_z - m_z*other.m_y,
+          -(m_x*other.m_z - m_z*other.m_x),
+          m_x*other.m_y - m_y*other.m_x);
     }
 
     /**

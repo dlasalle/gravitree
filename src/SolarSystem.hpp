@@ -33,6 +33,18 @@ class UnknownBodyException : public std::runtime_error
   }
 };
 
+class InvalidOperationException : public std::runtime_error
+{
+  public:
+  InvalidOperationException(std::string const operation) :
+      std::runtime_error(operation)
+  {
+    // do nothing
+  }
+};
+
+
+
 class SolarSystem
 {
   public:
