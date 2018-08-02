@@ -9,6 +9,8 @@
 
 #include "SolarSystem.hpp"
 
+#include <cassert>
+
 namespace gravitree
 {
 
@@ -49,9 +51,6 @@ void SolarSystem::addBody(
     Vector3D const velocity,
     std::string const parent)
 {
-  if (m_bodies.count(parent) == 0) {
-    throw UnknownBodyException(parent); 
-  }
   node_struct * const parentNode = m_bodies.at(parent).get();
 
   OrbitalState const state = OrbitalState::fromVectors( \
@@ -65,15 +64,13 @@ void SolarSystem::addBody(
     OrbitalState const state,
     std::string const parent)
 {
-  if (m_bodies.count(parent) == 0) {
-    throw UnknownBodyException(parent); 
-  }
   node_struct * const parentNode = m_bodies.at(parent).get();
 
   std::unique_ptr<node_struct> ptr(new node_struct{body, state, parentNode, {}});
-  m_bodies.emplace(body.name(), std::move(ptr));
 
   parentNode->children.emplace_back(ptr.get());
+
+  m_bodies.emplace(body.name(), std::move(ptr));
 }
 
 void SolarSystem::removeBody(
@@ -100,14 +97,61 @@ void SolarSystem::removeBody(
   m_bodies.erase(name); 
 }
 
-std::vector<std::pair<Body*, Vector3D>> SolarSystem::getSystemRelativeTo(
+Body SolarSystem::getBody(
     std::string const name) const
 {
-  return std::vector<std::pair<Body*, Vector3D>>();
+  return m_bodies.at(name)->body;
 }
 
+std::vector<std::pair<Body const *, Vector3D>>
+    SolarSystem::getSystemRelativeTo(
+        std::string const name) const
+{
+  // start with children nodes
+  std::vector<std::pair<Body const *, Vector3D>> list;
+  list.reserve(m_bodies.size());
 
+  node_struct const * node = m_bodies.at(name).get();
+  Vector3D origin = node->state.position();
 
+  getTreeRelativeTo(Vector3D(0,0,0), node, &list);
 
+  // scan up the tree adding nodes, when siblings are encountered add their
+  // trees
+  node_struct const * parent = node->parent;
+  while (parent != nullptr) {
+    list.emplace_back(&parent->body, origin);
+
+    for (node_struct const * const sibling : parent->children) {
+      if (sibling != node) {
+        getTreeRelativeTo(sibling->state.position() - origin, sibling, &list);
+      }
+    }
+
+    // move up the tree
+    node = parent;
+    parent = node->parent;
+    origin += node->state.position();
+  }
+
+  return list;
+}
+
+/******************************************************************************
+* PRIVATE METHODS *************************************************************
+******************************************************************************/
+
+void SolarSystem::getTreeRelativeTo(
+      Vector3D const origin,
+      node_struct const * const node,
+      std::vector<std::pair<Body const *, Vector3D>> * const list) const
+{
+  list->emplace_back(&node->body, origin);
+
+  for (node_struct const * const child : node->children) {
+    assert(child != nullptr); 
+    getTreeRelativeTo(child->state.position() - origin, child, list); 
+  }
+}
 
 }

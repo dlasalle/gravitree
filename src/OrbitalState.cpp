@@ -11,6 +11,11 @@
 #include "Constants.hpp"
 #include "Gravity.hpp"
 
+#include "Output.hpp"
+#include <iostream>
+
+#include <cassert>
+
 namespace gravitree
 {
 
@@ -166,22 +171,22 @@ Vector3D OrbitalState::velocity() const noexcept
       m_orbit.argumentOfPeriapsis() + m_trueAnomally);
 
   double const cos_i = std::cos(m_orbit.inclination());
-  double const sin_i = std::cos(m_orbit.inclination());
+  double const sin_i = std::sin(m_orbit.inclination());
 
   double const r = distance();
-  double const p = m_orbit.semimajorAxis() * \
-                   (1 - m_orbit.eccentricity()*m_orbit.eccentricity());
+  double const p = m_orbit.semilatusRectum(); 
 
   double const h = m_orbit.angularMomentum(); 
   double const h_r = h / r;
   double const he_rp = (m_orbit.eccentricity() / p) * h_r;
 
   Vector3D const pos = position();
-
-  return Vector3D(
+  Vector3D const vel =  Vector3D(
       (pos.x() * he_rp * sin_v) - (h_r*(cos_W*sin_wv+sin_W*cos_wv*cos_i)),
       (pos.y() * he_rp * sin_v) - (h_r*(sin_W*sin_wv+cos_W*cos_wv*cos_i)),
       (pos.z() * he_rp * sin_v) + (h_r*(sin_i * cos_wv)));
+
+  return vel;
 }
 
 Vector3D OrbitalState::position() const noexcept
@@ -189,15 +194,15 @@ Vector3D OrbitalState::position() const noexcept
   double const cos_W = std::cos(m_orbit.longitudeOfAscendingNode());
   double const sin_W = std::sin(m_orbit.longitudeOfAscendingNode());
 
+  double const r = distance();
+
   double const cos_wv = std::cos( \
       m_orbit.argumentOfPeriapsis() + m_trueAnomally);
   double const sin_wv = std::sin( \
       m_orbit.argumentOfPeriapsis() + m_trueAnomally);
 
   double const cos_i = std::cos(m_orbit.inclination());
-  double const sin_i = std::cos(m_orbit.inclination());
-
-  double const r = distance();
+  double const sin_i = std::sin(m_orbit.inclination());
 
   return Vector3D(
       r * (cos_W * cos_wv - sin_W * sin_wv * cos_i),
@@ -232,6 +237,11 @@ radian_type OrbitalState::eccentricAnomally() const noexcept
 second_type OrbitalState::time() const noexcept
 {
   return m_time;
+}
+
+KeplerOrbit OrbitalState::orbit() const noexcept
+{
+  return m_orbit;
 }
 
 }

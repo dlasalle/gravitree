@@ -16,6 +16,11 @@
 namespace gravitree
 {
 
+constexpr double deg2rad(double const d)
+{
+  return Constants::PI * d / 180.0;
+}
+
 UNITTEST(OrbtialState, trueAnomally)
 {
   KeplerOrbit orbit(1e10, 0.5, 0.7, 1.1, 2.1, 1e12);
@@ -51,18 +56,56 @@ UNITTEST(OrbtialState, piAnomally)
   testEqual(state.distance(), orbit.apoapsis());
 }
 
-#if 0
+UNITTEST(OrbitalState, earthFromElements)
+{
+  KeplerOrbit orbit(1.496e11, 0.0167, deg2rad(7.155), deg2rad(-11.26064),
+      deg2rad(114.20783), 1.9885e30);
+  OrbitalState state(orbit, 0);
+
+  testNearEqual(state.orbit().periapsis(), 1.47095e11, 1.0e-3, 1.0);
+  testNearEqual(state.orbit().apoapsis(), 1.521e11, 1.0e-3, 1.0);
+  testNearEqual(state.orbit().period(), 365.25*24*60*60, 1.0e-3, 1.0e-2);
+}
+
+UNITTEST(OrbitalState, fromVectors)
+{
+  Vector3D pos(0, 1.47095e11, 0);
+  Vector3D vel(3.029e4, 0, 0);
+
+  OrbitalState state = OrbitalState::fromVectors(pos, vel, 1.9885e30);
+
+  testNearEqual(state.orbit().periapsis(), 1.47095e11, 1.0e-3, 1.0);
+  testNearEqual(state.orbit().apoapsis(), 1.521e11, 1.0e-3, 1.0);
+  testNearEqual(state.orbit().period(), 365.25*24*60*60, 1.0e-3, 1.0e-2);
+  testNearEqual(state.orbit().eccentricity(), 0.0167, 1.0e-3, 1.0e-5);
+}
+
 UNITTEST(OrbtialState, position)
 {
+  KeplerOrbit orbit(1.496e11, 0.0167, deg2rad(7.155), deg2rad(-11.26064),
+      deg2rad(114.20783), 1.9885e30);
+  OrbitalState state(orbit, 0);
+
+  testNearEqual(state.position().magnitude(), state.distance(), 1.0e-3, 1.0);
+  testNearEqual(state.position().magnitude(), 1.47095e11, 1.0e-3, 1.0);
 }
 
 UNITTEST(OrbtialState, velocity)
 {
+  KeplerOrbit orbit(1.496e11, 0.0167, deg2rad(7.155), deg2rad(-11.26064),
+      deg2rad(114.20783), 1.9885e30);
+  OrbitalState state(orbit, 0);
+
+  testNearEqual(state.velocity().magnitude(), 3.029e4, 1.0e-3, 1.0);
 }
 
 UNITTEST(OrbtialState, distance)
 {
+  Vector3D pos(1.5e3, 2.3e2, 7.3e7);
+  Vector3D vel(9.5e3, 0.0, 0.0);
+  OrbitalState state = OrbitalState::fromVectors(pos, vel, 1.3e14);
+
+  testNearEqual(state.distance(), pos.magnitude(), 1.0e-3, 1.0);
 }
-#endif
 
 }

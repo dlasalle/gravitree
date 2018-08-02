@@ -107,20 +107,21 @@ double KeplerOrbit::mu() const
 
 double KeplerOrbit::angularMomentum() const
 {
-  double const e2 = m_eccentricity*m_eccentricity;
-  return std::sqrt(m_mu * m_semimajorAxis * (1.0 - e2));
+  return std::sqrt(m_mu * semilatusRectum());
+}
+
+double KeplerOrbit::semilatusRectum() const
+{
+  return m_semimajorAxis * (1.0 - m_eccentricity*m_eccentricity);
 }
 
 meter_type KeplerOrbit::apoapsis() const
 {
-  if (m_eccentricity >= 1.0) {
+  if (!isClosed()) {
     return INFINITY; 
   }
 
-  double const num = m_semimajorAxis * ( 1 - m_eccentricity*m_eccentricity);
-  double const den = 1 - m_eccentricity;
-
-  return num / den;
+  return semilatusRectum() / (1.0 - m_eccentricity);
 }
 
 meter_type KeplerOrbit::periapsis() const
@@ -129,6 +130,11 @@ meter_type KeplerOrbit::periapsis() const
   double const den = 1 + m_eccentricity;
 
   return num / den;
+}
+
+bool KeplerOrbit::isClosed() const
+{
+  return m_eccentricity < 1.0;
 }
 
 }

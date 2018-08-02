@@ -103,6 +103,13 @@ class OrbitalState
     */
     second_type time() const noexcept;
 
+    /**
+    * @brief Get the orbit.
+    *
+    * @return The orbit.
+    */
+    KeplerOrbit orbit() const noexcept;
+
   private:
     KeplerOrbit m_orbit;
     radian_type m_trueAnomally;

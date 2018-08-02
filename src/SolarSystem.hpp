@@ -23,16 +23,6 @@
 namespace gravitree
 {
 
-class UnknownBodyException : public std::runtime_error
-{
-  public:
-  UnknownBodyException(std::string const bodyName) :
-      std::runtime_error(bodyName)
-  {
-    // do nothing
-  }
-};
-
 class InvalidOperationException : public std::runtime_error
 {
   public:
@@ -116,6 +106,16 @@ class SolarSystem
   */
   void removeBody(
       std::string name);
+
+  /**
+  * @brief Get the body with the given name.
+  *
+  * @param name The body's name.
+  *
+  * @return The body.
+  */
+  Body getBody(
+      std::string const name) const;
   
   /**
   * @brief Get the location of every body in the system relative to another. No
@@ -125,7 +125,7 @@ class SolarSystem
   *
   * @return The pairs of bodies and relative positions.
   */
-  std::vector<std::pair<Body*, Vector3D>> getSystemRelativeTo(
+  std::vector<std::pair<Body const *, Vector3D>> getSystemRelativeTo(
       std::string name) const;
 
   private:
@@ -140,6 +140,11 @@ class SolarSystem
   second_type m_time;
   std::map<std::string, std::unique_ptr<node_struct>> m_bodies;
   node_struct * m_root;
+
+  void getTreeRelativeTo(
+      Vector3D origin,
+      node_struct const * node,
+      std::vector<std::pair<Body const *, Vector3D>> * list) const;
 };
 
 }

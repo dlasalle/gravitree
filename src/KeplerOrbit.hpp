@@ -65,7 +65,7 @@ class KeplerOrbit
     * @brief Get the longitude of the ascending node as measured from the
     * reference direction.
     *
-    * @return The longitude in radians.
+    * @return The longitude in radians (\f$ \Omega \f$).
     */
     radian_type longitudeOfAscendingNode() const;
 
@@ -79,7 +79,7 @@ class KeplerOrbit
     /**
     * @brief Get the mass of the parent body which is being orbited..
     *
-    * @return The mass in kg.
+    * @return The mass in kg (M).
     */
     kilo_type parentMass() const;
 
@@ -91,7 +91,11 @@ class KeplerOrbit
     second_type period() const;
 
     /**
-    * @brief Get the gravitation parameter GM.
+    * @brief Get the gravitational parameter.
+    *
+    * \f[
+    *    \mu = GM
+    * \f]
     *
     * @return The parameter.
     */
@@ -100,23 +104,65 @@ class KeplerOrbit
     /**
     * @brief Get the angular momentum of the orbit.
     *
-    * @return The angular momentum.
+    * \f[
+    *    h = \sqrt{\mu a (1 - e^2)}
+    * \f]
+    *
+    * @return The angular momentum (h).
     */
     double angularMomentum() const;
 
     /**
-    * @brief Get the distance of the apoapsis from the focal point.
+    * @brief Get the semi-latus rectum of the orbit.
+    *
+    * \f[
+    *    p = a(1-e^2)
+    * \f]
+    *
+    * @return The semi-latus rectum (p).
+    */
+    double semilatusRectum() const;
+
+    /**
+    * @brief Get the distance of the apoapsis from the focal point (the
+    * furthest distance during orbit).
+    *
+    * When the eccentricity (\f$e\f$) of the orbit is less than one:
+    *
+    * \f[
+    *    apoapsis = \frac{p}{1 - e}
+    * \f]
+    *
+    * and when the eccentricity is equal to or greater than one:
+    *
+    * \f[
+    *    apoapsis = \infty
+    * \f]
+    * because parabolic and hyperbolic orbits have no apaopsis.
     *
     * @return The distance in meters.
     */
     meter_type apoapsis() const;
 
     /**
-    * @brief Get the distance of the apoapsis from the focal point.
+    * @brief Get the distance of the apoapsis from the focal point (the closest
+    * distance during orbit).
+    *
+    * \f[
+    *    apoapsis = \frac{p}{1 + e}
+    * \f]
     *
     * @return The distance in meters.
     */
     meter_type periapsis() const;
+
+    /**
+    * @brief Check if this is a closed orbit (elliptic and circular), otherwise
+    * it is open (parabolic and hyperbolic).
+    *
+    * @return True if the orbit is closed.
+    */
+    bool isClosed() const;
 
   private:
     meter_type m_semimajorAxis;
