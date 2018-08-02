@@ -13,6 +13,7 @@
 #define GRAVITREE_ORBITALSTATE_HPP
 
 #include "KeplerOrbit.hpp"
+#include "Vector3D.hpp"
 
 namespace gravitree
 {
@@ -29,11 +30,6 @@ class OrbitalState
     OrbitalState(
         KeplerOrbit orbit,
         radian_type trueAnomally);
-
-    /**
-    * @brief Destructor.
-    */
-    ~OrbitalState();
 
     /**
     * @brief Set the time passed since the epoch.

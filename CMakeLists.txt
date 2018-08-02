@@ -45,20 +45,20 @@ if (DEFINED DEVEL AND NOT DEVEL EQUAL 0)
 endif()
 
 
-# Compiler-specific C++11 activation.
+# Compiler-specific C++14 activation.
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     execute_process(
         COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
     if (NOT (GCC_VERSION VERSION_GREATER 4.7 OR GCC_VERSION VERSION_EQUAL 4.7))
-      message("WARNING: Attempting to substitute -std=c++0x for -std=c++11.")
+      message("WARNING: Attempting to substitute -std=c++0x for -std=c++14.")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Doverride=")
     else()
       # set c++11 for g++ >= 4.7
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
     endif()
 else()
   # set c++11 standard for other compilers
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 endif()
 
 

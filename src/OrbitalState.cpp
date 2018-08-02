@@ -7,11 +7,11 @@
  * @date 2018-07-31
  */
 
-#include "OrbitalState.h"
+#include "OrbitalState.hpp"
+#include "Constants.hpp"
 
 namespace gravitree
 {
-
 
 /******************************************************************************
 * HELPER FUNCTIONS ************************************************************
@@ -24,9 +24,9 @@ radian_type calcEccentricAnomally(
     KeplerOrbit const orbit,
     radian_type const trueAnomally)
 {
-  double const e2 = orbit->eccentricity() * orbit->eccentricity();
+  double const e2 = orbit.eccentricity() * orbit.eccentricity();
   double const num = std::sqrt(1.0-e2) * std::sin(trueAnomally);
-  double const den = orbit->eccentricity() + std::cos(trueAnomally);
+  double const den = orbit.eccentricity() + std::cos(trueAnomally);
   return std::atan2(num, den);
 }
 
@@ -34,7 +34,7 @@ radian_type calcMeanAnomally(
     KeplerOrbit const orbit,
     radian_type const eccentricAnomally)
 {
-  return eccentricAnomally - orbit->eccentricity()*std::sin(eccentricAnomally);
+  return eccentricAnomally - orbit.eccentricity()*std::sin(eccentricAnomally);
 }
 
 double newtonsMethod(
@@ -74,7 +74,7 @@ OrbitalState::OrbitalState(
   m_time(0)
 {
   m_eccentricAnomally = calcEccentricAnomally(orbit, trueAnomally);
-  m_meanAnomally = calcMeanAnomally(orbit, eccentricAnomally);
+  m_meanAnomally = calcMeanAnomally(orbit, m_eccentricAnomally);
 
   // time since epoch 
   m_time = (m_meanAnomally*orbit.period()) / (2.0 * Constants::PI);
@@ -90,7 +90,7 @@ void OrbitalState::setTime(
 {
   m_time = time;
 
-  double const sweepRate = 2.0 * Constants::PI / orbit->period(); 
+  double const sweepRate = 2.0 * Constants::PI / m_orbit.period(); 
   m_meanAnomally = sweepRate * time;
 
   m_eccentricAnomally = newtonsMethod(m_meanAnomally, \
@@ -108,11 +108,14 @@ Vector3D OrbitalState::velocity() const noexcept
   double const cos_W = std::cos(m_orbit.longitudeOfAscendingNode());
   double const sin_W = std::sin(m_orbit.longitudeOfAscendingNode());
 
+  double const sin_v = std::sin(m_trueAnomally);
   double const cos_wv = std::cos( \
       m_orbit.argumentOfPeriapsis() + m_trueAnomally);
   double const sin_wv = std::sin( \
       m_orbit.argumentOfPeriapsis() + m_trueAnomally);
+
   double const cos_i = std::cos(m_orbit.inclination());
+  double const sin_i = std::cos(m_orbit.inclination());
 
   double const r = distance();
   double const p = m_orbit.semimajorAxis() * \
@@ -130,7 +133,7 @@ Vector3D OrbitalState::velocity() const noexcept
       (pos.z() * he_rp * sin_v) + (h_r*(sin_i * cos_wv)));
 }
 
-Vector3D position() const noexcept
+Vector3D OrbitalState::position() const noexcept
 {
   double const cos_W = std::cos(m_orbit.longitudeOfAscendingNode());
   double const sin_W = std::sin(m_orbit.longitudeOfAscendingNode());
@@ -139,7 +142,9 @@ Vector3D position() const noexcept
       m_orbit.argumentOfPeriapsis() + m_trueAnomally);
   double const sin_wv = std::sin( \
       m_orbit.argumentOfPeriapsis() + m_trueAnomally);
+
   double const cos_i = std::cos(m_orbit.inclination());
+  double const sin_i = std::cos(m_orbit.inclination());
 
   double const r = distance();
 
@@ -149,7 +154,7 @@ Vector3D position() const noexcept
       r * (sin_i * sin_wv));
 }
 
-meter_type distance() const noexcept
+meter_type OrbitalState::distance() const noexcept
 {
   double const a = m_orbit.semimajorAxis();
   double const e = m_orbit.eccentricity();
@@ -158,22 +163,22 @@ meter_type distance() const noexcept
   return a * (1.0 - e * cos_E);
 }
 
-radian_type trueAnomally() const noexcept
+radian_type OrbitalState::trueAnomally() const noexcept
 {
   return m_trueAnomally;
 }
 
-radian_type meanAnomally() const noexcept
+radian_type OrbitalState::meanAnomally() const noexcept
 {
   return m_meanAnomally;
 }
 
-radian_type eccentricAnomally() const noexcept
+radian_type OrbitalState::eccentricAnomally() const noexcept
 {
   return m_eccentricAnomally;
 }
 
-second_type time() const noexcept
+second_type OrbitalState::time() const noexcept
 {
   return m_time;
 }

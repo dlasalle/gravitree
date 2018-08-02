@@ -14,7 +14,6 @@
 
 #include "Vector3D.hpp"
 #include "Types.hpp"
-#include <ostream>
 
 namespace gravitree
 {
@@ -40,7 +39,7 @@ class Rotation
      */
     Rotation(
         Vector3D const vec,
-        double const rot) noexcept :
+        radian_type const rot) noexcept :
       m_vec(vec),
       m_rot(rot)
     {
@@ -82,7 +81,7 @@ class Rotation
 
   private:
     Vector3D m_vec;
-    double m_rot;
+    radian_type m_rot;
 };
 
 }

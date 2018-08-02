@@ -18,24 +18,26 @@ namespace gravitree
 
 UNITTEST(Body, mass)
 {
-  Body b(10.0);
+  Body b("test", 10.0);
 
   testEqual(b.mass(), 10.0);
 }
 
+UNITTEST(Body, name)
+{
+  Body b("test", 10.0);
+
+  testEqual(b.name(), "test");
+}
+
 UNITTEST(Body, angularVelocity)
 {
-  Body b(10.0);
+  Body b("test", 10.0);
 
   testEqual(b.angularVelocity(), Rotation());
 }
 
-UNITTEST(Body, linearVelocity)
-{
-  Body b(10.0);
 
-  testEqual(b.linearVelocity(), Vector3D(0.0, 0.0, 0.0));
-}
 
 }
 

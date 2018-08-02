@@ -18,6 +18,7 @@
 #include "Types.hpp"
 
 #include <memory>
+#include <string>
 
 namespace gravitree
 {
@@ -28,15 +29,24 @@ class Body
     /**
     * @brief Create a physics body.
     *
+    * @param name The name of the body.
     * @param mass The mass of the body.
     */
     Body(
+        std::string name,
         kilo_type mass);
 
     /**
     * @brief Virtual destructor.
     */
     virtual ~Body();
+
+    /**
+    * @brief Get the name of this body.
+    *
+    * @return The name of this body.
+    */
+    std::string name() const noexcept;
 
     /**
     * @brief Get the mass of the object.
@@ -60,49 +70,10 @@ class Body
     void setAngularVelocity(
         Rotation velocity) noexcept;
 
-    /**
-    * @brief Get the linear velocity of this object.
-    *
-    * @return The velocity.
-    */
-    Vector3D linearVelocity() const noexcept;
-    
-    /**
-    * @brief Set the linear velocity.
-    *
-    * @param velocity The new linear velocity.
-    */
-    void setLinearVelocity(
-        Vector3D velocity) noexcept;
-
-    /**
-    * @brief Move the object by the given delta in meters.
-    *
-    * @param delta The delta in meters.
-    */
-    void move(
-        Vector3D delta) noexcept;
-
-    /**
-    * @brief Accelerate this body linearly
-    *
-    * @param delta The linear change in velocity.
-    */
-    void accelerateLinear(
-        Vector3D delta) noexcept;
-
-    /**
-    * @brief Get the position of the object.
-    *
-    * @return The position.
-    */
-    Position position() const noexcept;
- 
   private:
+    std::string m_name;
     kilo_type m_mass;
     Rotation m_angularVelocity;
-    Vector3D m_linearVelocity;
-    Position m_position;
 
 };
 

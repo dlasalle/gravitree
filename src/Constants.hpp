@@ -15,10 +15,14 @@
 namespace gravitree
 {
 
-class Constants
+namespace Constants
 {
-  public:
-    static constexpr double const PI = 3.141592653589793;
+
+namespace
+{
+constexpr double const PI = 3.141592653589793;
+}
+
 };
 
 }

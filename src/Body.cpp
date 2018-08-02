@@ -19,11 +19,11 @@ namespace gravitree
 ******************************************************************************/
 
 Body::Body(
+    std::string const name,
     kilo_type const mass) :
+  m_name(name),
   m_mass(mass),
-  m_angularVelocity(),
-  m_linearVelocity(),
-  m_position()
+  m_angularVelocity()
 {
   // do nothing
 }
@@ -38,6 +38,11 @@ Body::~Body()
 /******************************************************************************
 * PUBLIC METHODS **************************************************************
 ******************************************************************************/
+
+std::string Body::name() const noexcept
+{
+  return m_name;
+}
 
 kilo_type Body::mass() const noexcept
 {
@@ -54,34 +59,5 @@ void Body::setAngularVelocity(
 {
   m_angularVelocity = velocity;
 }
-
-Vector3D Body::linearVelocity() const noexcept
-{
-  return m_linearVelocity;
-}
-
-void Body::setLinearVelocity(
-    Vector3D const velocity) noexcept
-{
-  m_linearVelocity = velocity;
-}
-
-void Body::move(
-    Vector3D const delta) noexcept
-{
-  m_position += delta;
-}
-
-void Body::accelerateLinear(
-    Vector3D const delta) noexcept
-{
-  m_linearVelocity += delta;
-}
-
-Position Body::position() const noexcept
-{
-  return m_position;
-}
-
 
 }
