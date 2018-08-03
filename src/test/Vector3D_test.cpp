@@ -11,6 +11,7 @@
 
 #include "Vector3D.hpp"
 #include "UnitTest.hpp"
+#include "Output.hpp"
 
 
 namespace gravitree
@@ -71,6 +72,56 @@ UNITTEST(Vector3D, subtract)
   testEqual(w.x(), 5.0);
   testEqual(w.y(), -5.0);
   testEqual(w.z(), 0.0);
+}
+
+UNITTEST(Vector3D, dotSelf)
+{
+  Vector3D const v(1.0, 2.0, 3.0);
+  double const mag2 = v*v;
+  testEqual(v.magnitude2(), mag2);
+}
+
+
+UNITTEST(Vector3D, dotOther)
+{
+  Vector3D const v(1.0, 2.0, 3.0);
+  Vector3D const u(3.0, 2.0, 1.0);
+  double const dot = v*u;
+
+  testEqual(10.0, dot);
+}
+
+UNITTEST(Vector3D, crossSelf)
+{
+  Vector3D const v(1.0, 2.0, 3.0);
+  Vector3D const cross = v.cross(v);
+
+  Vector3D const u(0.0, 0.0, 0.0);
+
+  testEqual(u, cross);
+}
+
+
+UNITTEST(Vector3D, crossRight)
+{
+  Vector3D const v(2.0, 0.0, 0.0);
+  Vector3D const u(0.0, 1.5, 0.0);
+  Vector3D const cross = v.cross(u);
+
+  Vector3D const w(0.0, 0.0, 3.0);
+
+  testEqual(w, cross);
+}
+
+UNITTEST(Vector3D, crossOther)
+{
+  Vector3D const v(3.0, -3.0, 1.0);
+  Vector3D const u(4.0, 9.0, 2.0);
+  Vector3D const cross = v.cross(u);
+
+  Vector3D const w(-15.0, -2.0, 39.0);
+
+  testEqual(w, cross);
 }
 
 UNITTEST(Vector3D, magnitude)
