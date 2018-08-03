@@ -87,7 +87,8 @@ OrbitalState OrbitalState::fromVectors(
   double const E = v*v*0.5 - (mu / r);
 
   double const semimajorAxis = - 0.5 * mu / E;
-  double const eccentricity = std::sqrt(1.0-(h*h)/(semimajorAxis*mu));
+  double const eccentricity = //std::sqrt(1.0-(h*h)/(semimajorAxis*mu));
+      (velocity.cross(hVec) / mu - position / r).magnitude();
 
   double const cos_i = hVec.z() / h;
   double const inclination = std::acos(cos_i);
@@ -105,7 +106,7 @@ OrbitalState OrbitalState::fromVectors(
   double const p = semimajorAxis * (1.0 - eccentricity*eccentricity);
 
   double const trueAnomally = std::atan2( \
-      std::sqrt(p/mu) * (position*position), p-r);
+      std::sqrt(p/mu) * (velocity*position), p-r);
 
   double const argumentOfPeriapsis = w_v - trueAnomally;
 

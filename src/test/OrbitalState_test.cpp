@@ -67,17 +67,42 @@ UNITTEST(OrbitalState, earthFromElements)
   testNearEqual(state.orbit().period(), 365.25*24*60*60, 1.0e-3, 1.0e-2);
 }
 
-UNITTEST(OrbitalState, fromVectors)
+UNITTEST(OrbitalState, fromVectorsPerihelion)
 {
   Vector3D pos(0, 1.47095e11, 0);
   Vector3D vel(3.029e4, 0, 0);
 
   OrbitalState state = OrbitalState::fromVectors(pos, vel, 1.9885e30);
 
+  testNearEqual(state.trueAnomally(), 0.0, 1.0e-3, 1.0e-5);
+
   testNearEqual(state.orbit().periapsis(), 1.47095e11, 1.0e-3, 1.0);
   testNearEqual(state.orbit().apoapsis(), 1.521e11, 1.0e-3, 1.0);
   testNearEqual(state.orbit().period(), 365.25*24*60*60, 1.0e-3, 1.0e-2);
-  testNearEqual(state.orbit().eccentricity(), 0.0167, 1.0e-3, 1.0e-5);
+
+  testNearEqual(state.orbit().eccentricity(), 0.01671, 1.0e-3, 1.0e-5);
+
+  testNearEqual(state.position().magnitude(), 1.47095e11, 1.0e-3, 1.0);
+  testNearEqual(state.velocity().magnitude(), 3.029e4, 1.0e-3, 1.0);
+}
+
+UNITTEST(OrbitalState, fromVectorsAphelion)
+{
+  Vector3D pos(0, 1.1521e11, 0);
+  Vector3D vel(2.929e4, 0, 0);
+
+  OrbitalState state = OrbitalState::fromVectors(pos, vel, 1.9885e30);
+
+  testNearEqual(state.trueAnomally(), Constants::PI, 1.0e-3, 1.0e-5);
+
+  testNearEqual(state.orbit().periapsis(), 1.47095e11, 1.0e-3, 1.0);
+  testNearEqual(state.orbit().apoapsis(), 1.521e11, 1.0e-3, 1.0);
+  testNearEqual(state.orbit().period(), 365.25*24*60*60, 1.0e-3, 1.0e-2);
+
+  testNearEqual(state.orbit().eccentricity(), 0.01671, 1.0e-3, 1.0e-5);
+
+  testNearEqual(state.position().magnitude(), 1.47095e11, 1.0e-3, 1.0);
+  testNearEqual(state.velocity().magnitude(), 3.029e4, 1.0e-3, 1.0);
 }
 
 UNITTEST(OrbtialState, position)
@@ -88,6 +113,10 @@ UNITTEST(OrbtialState, position)
 
   testNearEqual(state.position().magnitude(), state.distance(), 1.0e-3, 1.0);
   testNearEqual(state.position().magnitude(), 1.47095e11, 1.0e-3, 1.0);
+
+  state.setTime(182.625*24*60*60);
+
+  testNearEqual(state.position().magnitude(), 1.521e11, 1.0e-3, 1.0);
 }
 
 UNITTEST(OrbtialState, velocity)
