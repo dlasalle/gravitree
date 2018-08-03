@@ -124,6 +124,19 @@ UNITTEST(Vector3D, crossOther)
   testEqual(w, cross);
 }
 
+UNITTEST(Vector3D, crossOtherOpposite)
+{
+  Vector3D const v(3.0, -3.0, 1.0);
+  Vector3D const u(4.0, 9.0, 2.0);
+  Vector3D const cross = u.cross(v);
+
+  Vector3D const w(15.0, 2.0, -39.0);
+
+  testEqual(w, cross);
+}
+
+
+
 UNITTEST(Vector3D, magnitude)
 {
   Vector3D v(0.0, 0.0, 5.0);

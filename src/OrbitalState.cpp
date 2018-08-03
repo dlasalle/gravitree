@@ -77,6 +77,10 @@ OrbitalState OrbitalState::fromVectors(
     kilo_type const parentMass)
 {
   Vector3D const hVec = position.cross(velocity);
+
+  // delete me
+  std::cout << "hvec = " << hVec << std::endl;
+
   double const h = hVec.magnitude();
 
   double const r = position.magnitude();
@@ -86,9 +90,12 @@ OrbitalState OrbitalState::fromVectors(
 
   double const E = v*v*0.5 - (mu / r);
 
+  // delete me
+  std::cout << "E = " << E << std::endl;
+
   double const semimajorAxis = - 0.5 * mu / E;
   double const eccentricity = //std::sqrt(1.0-(h*h)/(semimajorAxis*mu));
-      (velocity.cross(hVec) / mu - position / r).magnitude();
+      ((velocity.cross(hVec) / mu) - (position / r)).magnitude();
 
   double const cos_i = hVec.z() / h;
   double const inclination = std::acos(cos_i);
@@ -184,7 +191,7 @@ Vector3D OrbitalState::velocity() const noexcept
   Vector3D const pos = position();
   Vector3D const vel =  Vector3D(
       (pos.x() * he_rp * sin_v) - (h_r*(cos_W*sin_wv+sin_W*cos_wv*cos_i)),
-      (pos.y() * he_rp * sin_v) - (h_r*(sin_W*sin_wv+cos_W*cos_wv*cos_i)),
+      (pos.y() * he_rp * sin_v) - (h_r*(sin_W*sin_wv-cos_W*cos_wv*cos_i)),
       (pos.z() * he_rp * sin_v) + (h_r*(sin_i * cos_wv)));
 
   return vel;
