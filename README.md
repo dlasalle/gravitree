@@ -1,3 +1,9 @@
+<a href="https://travis-ci.org/dlasalle/gravitree">
+  <img src="https://travis-ci.org/dlasalle/gravitree.svg?branch=master"/>
+</a>
+
+
+
 Gravitree
 =========
 
