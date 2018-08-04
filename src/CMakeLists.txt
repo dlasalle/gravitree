@@ -1,4 +1,3 @@
-include_directories(.)
 file(GLOB sources *.cpp)
 
 # libraries
