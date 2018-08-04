@@ -48,14 +48,14 @@ UNITTEST(SolarSystem, GetSystemRelativeToSun)
       testEqual(pair.second.z(), 0.0);
     } else if (pair.first->name() == "earth") {
       testEqual(pair.first->mass(), 5.97237e24);
-      testEqual(pair.second.x(), 0.0);
-      testEqual(pair.second.y(), 1.47095e11);
-      testEqual(pair.second.z(), 0.0);
+      testNearEqual(pair.second.x(), 0.0, 1.0e-3, 1.0);
+      testNearEqual(pair.second.y(), 1.47095e11, 1.0e-3, 1.0);
+      testNearEqual(pair.second.z(), 0.0, 1.0e-3, 1.0);
     } else if (pair.first->name() == "mars") {
       testEqual(pair.first->mass(), 6.4171e23);
-      testEqual(pair.second.x(), 2.067e11);
-      testEqual(pair.second.y(), 0.0);
-      testEqual(pair.second.z(), 0.0);
+      testNearEqual(pair.second.x(), 2.067e11, 1.0e-3, 1.0);
+      testNearEqual(pair.second.y(), 0.0, 1.0e-3, 1.0);
+      testNearEqual(pair.second.z(), 0.0, 1.0e-3, 1.0);
     } else {
       testFail() << "Unknown object: " << pair.first->name();
     }
