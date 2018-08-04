@@ -20,5 +20,5 @@ martix:
             - clang-3.8
           sources: *sources
 script:
-  - "./configure --cxx=${CXX} --cc=${CC} --debug --devel --test && make && make test"
-  - "./configure --cxx=${CXX} --cc=${CC} --test && make && make test"
+  - "./configure --debug --devel --test && make && make test"
+  - "./configure --test && make && make test"
