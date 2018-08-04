@@ -70,8 +70,8 @@ UNITTEST(OrbitalState, earthFromElements)
 
 UNITTEST(OrbitalState, fromVectorsPerihelion)
 {
-  Vector3D pos(0, -1.47095e11, 0);
-  Vector3D vel(3.029e4, 0, 0);
+  Vector3D pos(0, -1.471e11, 0);
+  Vector3D vel(3.02863e4, 0, 0);
 
   OrbitalState state = OrbitalState::fromVectors(pos, vel, 1.9885e30);
 
@@ -95,8 +95,8 @@ UNITTEST(OrbitalState, fromVectorsPerihelion)
 
 UNITTEST(OrbitalState, fromVectorsAphelion)
 {
-  Vector3D pos(0, 1.1521e11, 0);
-  Vector3D vel(2.929e4, 0, 0);
+  Vector3D pos(0, 1.521e11, 0);
+  Vector3D vel(2.92913e4, 0, 0);
 
   OrbitalState state = OrbitalState::fromVectors(pos, vel, 1.9885e30);
 

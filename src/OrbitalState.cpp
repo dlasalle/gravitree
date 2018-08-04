@@ -11,9 +11,6 @@
 #include "Constants.hpp"
 #include "Gravity.hpp"
 
-#include "Output.hpp"
-#include <iostream>
-
 #include <cassert>
 
 namespace gravitree
@@ -78,9 +75,6 @@ OrbitalState OrbitalState::fromVectors(
 {
   Vector3D const hVec = position.cross(velocity);
 
-  // delete me
-  std::cout << "hvec = " << hVec << std::endl;
-
   double const h = hVec.magnitude();
 
   double const r = position.magnitude();
@@ -90,16 +84,12 @@ OrbitalState OrbitalState::fromVectors(
 
   double const E = v*v*0.5 - (mu / r);
 
-  // delete me
-  std::cout << "E = " << E << std::endl;
-
   double const semimajorAxis = - 0.5 * mu / E;
-  double const eccentricity = //std::sqrt(1.0-(h*h)/(semimajorAxis*mu));
-      ((velocity.cross(hVec) / mu) - (position / r)).magnitude();
+  double const eccentricity = std::sqrt(1.0-(h*h)/(semimajorAxis*mu));
 
   double const cos_i = hVec.z() / h;
-  double const inclination = std::acos(cos_i);
-
+  double const inclination = hVec.z() >= 0 ? \
+      std::acos(cos_i) : std::acos(cos_i) - Constants::PI;
   double const sin_i = std::sin(inclination);
 
   double const longitudeOfAscendingNode = std::atan2(hVec.x(), -hVec.y());
