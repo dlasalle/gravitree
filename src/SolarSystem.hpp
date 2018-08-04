@@ -125,7 +125,7 @@ class SolarSystem
   *
   * @return The pairs of bodies and relative positions.
   */
-  std::vector<std::pair<Body const *, Vector3D>> getSystemRelativeTo(
+  std::vector<std::pair<Body const *, Vector3D>> getRelativeTo(
       std::string name) const;
 
   private:

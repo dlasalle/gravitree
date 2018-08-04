@@ -104,7 +104,7 @@ Body SolarSystem::getBody(
 }
 
 std::vector<std::pair<Body const *, Vector3D>>
-    SolarSystem::getSystemRelativeTo(
+    SolarSystem::getRelativeTo(
         std::string const name) const
 {
   // start with children nodes
@@ -114,7 +114,7 @@ std::vector<std::pair<Body const *, Vector3D>>
   node_struct const * node = m_bodies.at(name).get();
   Vector3D origin = node->state.position();
 
-  getTreeRelativeTo(Vector3D(0,0,0), node, &list);
+  getTreeRelativeTo(-origin, node, &list);
 
   // scan up the tree adding nodes, when siblings are encountered add their
   // trees
@@ -124,7 +124,7 @@ std::vector<std::pair<Body const *, Vector3D>>
 
     for (node_struct const * const sibling : parent->children) {
       if (sibling != node) {
-        getTreeRelativeTo(sibling->state.position() - origin, sibling, &list);
+        getTreeRelativeTo(-origin, sibling, &list);
       }
     }
 
@@ -148,11 +148,12 @@ void SolarSystem::getTreeRelativeTo(
 {
   assert(origin.isValid());
 
-  list->emplace_back(&node->body, origin);
+  Vector3D const offset = node->state.position() + origin;
+  list->emplace_back(&node->body, offset);
 
   for (node_struct const * const child : node->children) {
     assert(child != nullptr); 
-    getTreeRelativeTo(child->state.position() + origin, child, list); 
+    getTreeRelativeTo(offset, child, list); 
   }
 }
 
