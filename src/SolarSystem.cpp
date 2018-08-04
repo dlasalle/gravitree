@@ -146,6 +146,8 @@ void SolarSystem::getTreeRelativeTo(
       node_struct const * const node,
       std::vector<std::pair<Body const *, Vector3D>> * const list) const
 {
+  assert(origin.isValid());
+
   list->emplace_back(&node->body, origin);
 
   for (node_struct const * const child : node->children) {

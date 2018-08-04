@@ -396,6 +396,16 @@ class Vector3D
       return (*this)*invMag;
     }
 
+    /**
+    * @brief Check if all values in this vector are valid (i.e., neither NaN or
+    * Inf).
+    *
+    * @return True if all the values are valid.
+    */
+    inline bool isValid() const noexcept
+    {
+      return std::isfinite(m_x) && std::isfinite(m_y) && std::isfinite(m_z);
+    }
 
   private:
     union {

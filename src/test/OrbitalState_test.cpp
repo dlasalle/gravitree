@@ -68,10 +68,34 @@ UNITTEST(OrbitalState, earthFromElements)
   testNearEqual(state.orbit().angularMomentum(), 4.4551e15, 1.0e-3, 1.0);
 }
 
+UNITTEST(OrbitalState, earthFromElementsSymmetry)
+{
+  KeplerOrbit orbit(1.496e11, 0.0167, deg2rad(7.155), deg2rad(-11.26064),
+      deg2rad(114.20783), 1.9885e30);
+  OrbitalState state(orbit, 0);
+
+  Vector3D const v = state.velocity();
+  Vector3D const r = state.position();
+
+  OrbitalState state2 = OrbitalState::fromVectors(r,v, 1.9885e30);
+
+  testNearEqual(state.orbit().semimajorAxis(), 1.496e11, 1.0e-3, 1.0);
+  testNearEqual(state.orbit().eccentricity(), 0.01671, 1.0e-3, 1.0e-5);
+  testNearEqual(state.orbit().inclination(), deg2rad(7.155), 1.0e-3, 1.0e-2);
+  testNearEqual(state.orbit().longitudeOfAscendingNode(), deg2rad(-11.26064), \
+      1.0e-3, 1.0e-3);
+  testNearEqual(state.orbit().argumentOfPeriapsis(), deg2rad(114.20783), \
+      1.0e-3, 1.0e-3);
+  testNearEqual(state2.orbit().periapsis(), 1.47095e11, 1.0e-3, 1.0);
+  testNearEqual(state2.orbit().apoapsis(), 1.521e11, 1.0e-3, 1.0);
+  testNearEqual(state2.orbit().period(), 365.25*24*60*60, 1.0e-3, 1.0e-2);
+  testNearEqual(state2.orbit().angularMomentum(), 4.4551e15, 1.0e-3, 1.0);
+}
+
 UNITTEST(OrbitalState, fromVectorsPerihelion)
 {
-  Vector3D pos(0, -1.471e11, 0);
-  Vector3D vel(3.02863e4, 0, 0);
+  Vector3D pos(1.471e11, 0);
+  Vector3D vel(0, 3.02863e4, 0);
 
   OrbitalState state = OrbitalState::fromVectors(pos, vel, 1.9885e30);
 
@@ -95,8 +119,8 @@ UNITTEST(OrbitalState, fromVectorsPerihelion)
 
 UNITTEST(OrbitalState, fromVectorsAphelion)
 {
-  Vector3D pos(0, 1.521e11, 0);
-  Vector3D vel(2.92913e4, 0, 0);
+  Vector3D pos(-1.521e11, 0, 0);
+  Vector3D vel(0, -2.92913e4, 0);
 
   OrbitalState state = OrbitalState::fromVectors(pos, vel, 1.9885e30);
 
@@ -113,8 +137,8 @@ UNITTEST(OrbitalState, fromVectorsAphelion)
   testNearEqual(state.orbit().apoapsis(), 1.521e11, 1.0e-3, 1.0);
   testNearEqual(state.orbit().period(), 365.25*24*60*60, 1.0e-3, 1.0e-2);
 
-  testNearEqual(state.position().magnitude(), 1.47095e11, 1.0e-3, 1.0);
-  testNearEqual(state.velocity().magnitude(), 3.029e4, 1.0e-3, 1.0);
+  testNearEqual(state.position().magnitude(), 1.521e11, 1.0e-3, 1.0);
+  testNearEqual(state.velocity().magnitude(), 2.92913e4, 1.0e-3, 1.0);
 }
 
 UNITTEST(OrbtialState, position)

@@ -76,36 +76,55 @@ OrbitalState OrbitalState::fromVectors(
   Vector3D const hVec = position.cross(velocity);
 
   double const h = hVec.magnitude();
-
   double const r = position.magnitude();
   double const v = velocity.magnitude();
+
+  assert(r > 0);
 
   double const mu = parentMass * Gravity::G;
 
   double const E = v*v*0.5 - (mu / r);
 
+  assert(E != 0);
+
   double const semimajorAxis = - 0.5 * mu / E;
-  double const eccentricity = std::sqrt(1.0-(h*h)/(semimajorAxis*mu));
+  Vector3D const e = (velocity.cross(hVec) / mu) - (position/r);
+  double const eccentricity = e.magnitude();
 
   double const cos_i = hVec.z() / h;
-  double const inclination = hVec.z() >= 0 ? \
-      std::acos(cos_i) : std::acos(cos_i) - Constants::PI;
-  double const sin_i = std::sin(inclination);
-
-  double const longitudeOfAscendingNode = std::atan2(hVec.x(), -hVec.y());
-  double const cos_W = std::cos(longitudeOfAscendingNode);
-  double const sin_W = std::sin(longitudeOfAscendingNode);
-
-  double const w_v = std::atan2( \
-      position.z() / sin_i, \
-      position.x() * cos_W + position.y() * sin_W);
+  double const inclination = std::acos(cos_i);
+  double const sin_i = std::sqrt(hVec.x()*hVec.x()+hVec.y()*hVec.y())/h;
 
   double const p = semimajorAxis * (1.0 - eccentricity*eccentricity);
 
   double const trueAnomally = std::atan2( \
       std::sqrt(p/mu) * (velocity*position), p-r);
+  assert(std::isfinite(trueAnomally));
 
-  double const argumentOfPeriapsis = w_v - trueAnomally;
+  double longitudeOfAscendingNode;
+  double argumentOfPeriapsis;
+  if (sin_i == 0) {
+    // equatorial orbit
+    assert(e.z() == 0);
+    longitudeOfAscendingNode = 0.0;
+    argumentOfPeriapsis = std::atan2(e.y(), e.x());
+    if (hVec.z() < 0) {
+      // counter clockwise orbit
+      argumentOfPeriapsis = 2.0 * Constants::PI - argumentOfPeriapsis;
+    }
+  } else {
+    assert(sin_i != 0);
+    longitudeOfAscendingNode = std::atan2(hVec.x(), -hVec.y());
+    double const cos_W = std::cos(longitudeOfAscendingNode);
+    double const sin_W = std::sin(longitudeOfAscendingNode);
+
+    double const w_v = std::atan2( \
+        position.z() / sin_i, \
+        position.x() * cos_W + position.y() * sin_W);
+    assert(std::isfinite(w_v));
+
+    argumentOfPeriapsis = w_v - trueAnomally;
+  }
 
   KeplerOrbit orbit(semimajorAxis, eccentricity, inclination,
       longitudeOfAscendingNode, argumentOfPeriapsis, parentMass);
