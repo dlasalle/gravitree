@@ -10,11 +10,11 @@ martix:
           packages:
             - g++-5
     - os: linux
-        env: COMPILER_NAME=clang CXX=clang++-3.8 CC=clang-3.8
-        addons:
-          apt:
-            packages:
-              - clang-3.8
+      env: COMPILER_NAME=clang CXX=clang++-3.8 CC=clang-3.8
+      addons:
+        apt:
+          packages:
+            - clang-3.8
 script:
   - "./configure --debug --devel --test && make && make test"
   - "./configure --test && make && make test"
