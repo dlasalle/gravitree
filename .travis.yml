@@ -1,6 +1,14 @@
 sudo: required
 dist: trusty
-language: cpp
+language: generic
+martix:
+  include:
+    - os: linux
+      env: COMPILER_NAME=gcc CXX=g++-5 CC=gcc-5
+      addons:
+        apt:
+          packages:
+            - g++-5
 compiler:
   - clang
   - gcc
