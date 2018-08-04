@@ -120,7 +120,7 @@ std::vector<std::pair<Body const *, Vector3D>>
   // trees
   node_struct const * parent = node->parent;
   while (parent != nullptr) {
-    list.emplace_back(&parent->body, origin);
+    list.emplace_back(&parent->body, -origin);
 
     for (node_struct const * const sibling : parent->children) {
       if (sibling != node) {
@@ -152,7 +152,7 @@ void SolarSystem::getTreeRelativeTo(
 
   for (node_struct const * const child : node->children) {
     assert(child != nullptr); 
-    getTreeRelativeTo(child->state.position() - origin, child, list); 
+    getTreeRelativeTo(child->state.position() + origin, child, list); 
   }
 }
 
