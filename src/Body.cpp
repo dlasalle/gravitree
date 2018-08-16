@@ -19,9 +19,9 @@ namespace gravitree
 ******************************************************************************/
 
 Body::Body(
-    std::string const name,
+    id_type id,
     kilo_type const mass) :
-  m_name(name),
+  m_id(id),
   m_mass(mass),
   m_angularVelocity()
 {
@@ -39,9 +39,9 @@ Body::~Body()
 * PUBLIC METHODS **************************************************************
 ******************************************************************************/
 
-std::string Body::name() const noexcept
+Body::id_type Body::id() const noexcept
 {
-  return m_name;
+  return m_id;
 }
 
 kilo_type Body::mass() const noexcept

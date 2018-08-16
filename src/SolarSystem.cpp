@@ -32,7 +32,7 @@ SolarSystem::SolarSystem(
       {}});
   m_root = rootPtr.get();
 
-  m_bodies.emplace(m_root->body.name(), std::move(rootPtr));
+  m_bodies.emplace(m_root->body.id(), std::move(rootPtr));
 }
 
 /******************************************************************************
@@ -49,7 +49,7 @@ void SolarSystem::addBody(
     Body const body,
     Vector3D const position,
     Vector3D const velocity,
-    std::string const parent)
+    Body::id_type const parent)
 {
   node_struct * const parentNode = m_bodies.at(parent).get();
 
@@ -62,7 +62,7 @@ void SolarSystem::addBody(
 void SolarSystem::addBody(
     Body const body,
     OrbitalState const state,
-    std::string const parent)
+    Body::id_type const parent)
 {
   node_struct * const parentNode = m_bodies.at(parent).get();
 
@@ -70,13 +70,13 @@ void SolarSystem::addBody(
 
   parentNode->children.emplace_back(ptr.get());
 
-  m_bodies.emplace(body.name(), std::move(ptr));
+  m_bodies.emplace(body.id(), std::move(ptr));
 }
 
 void SolarSystem::removeBody(
-    std::string const name)
+    Body::id_type const id)
 {
-  node_struct * const node = m_bodies.at(name).get();
+  node_struct * const node = m_bodies.at(id).get();
   if (node->parent != nullptr) {
     throw InvalidOperationException("Remove root");
   }
@@ -94,24 +94,24 @@ void SolarSystem::removeBody(
     node->parent->children.emplace_back(child);
   }
 
-  m_bodies.erase(name); 
+  m_bodies.erase(id); 
 }
 
 Body SolarSystem::getBody(
-    std::string const name) const
+    Body::id_type const id) const
 {
-  return m_bodies.at(name)->body;
+  return m_bodies.at(id)->body;
 }
 
 std::vector<std::pair<Body const *, Vector3D>>
     SolarSystem::getRelativeTo(
-        std::string const name) const
+        Body::id_type const id) const
 {
   // start with children nodes
   std::vector<std::pair<Body const *, Vector3D>> list;
   list.reserve(m_bodies.size());
 
-  node_struct const * node = m_bodies.at(name).get();
+  node_struct const * node = m_bodies.at(id).get();
   Vector3D origin = node->state.position();
 
   getTreeRelativeTo(-origin, node, &list);
