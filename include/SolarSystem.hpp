@@ -114,9 +114,19 @@ class SolarSystem
   *
   * @return The body.
   */
-  Body getBody(
+  Body const * getBody(
       Body::id_type id) const;
   
+  /**
+  * @brief Get the body with the given name.
+  *
+  * @param id The body's id.
+  *
+  * @return The body.
+  */
+  Body * getBody(
+      Body::id_type id);
+
   /**
   * @brief Get the location of every body in the system relative to another. No
   * rotations are applied.

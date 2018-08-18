@@ -97,10 +97,16 @@ void SolarSystem::removeBody(
   m_bodies.erase(id); 
 }
 
-Body SolarSystem::getBody(
+Body const * SolarSystem::getBody(
     Body::id_type const id) const
 {
-  return m_bodies.at(id)->body;
+  return &m_bodies.at(id)->body;
+}
+
+Body * SolarSystem::getBody(
+    Body::id_type const id)
+{
+  return &m_bodies.at(id)->body;
 }
 
 std::vector<std::pair<Body const *, Vector3D>>
