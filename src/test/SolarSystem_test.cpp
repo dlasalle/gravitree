@@ -205,7 +205,45 @@ UNITTEST(SolarSystem, GetSystemRelativeToMoon)
   }
 }
 
+UNITTEST(SolarSystem, GetBody)
+{
+  Body sun(0, 1.9885e30);
+
+  SolarSystem system(sun);
+
+  Body earth(3, 5.97237e24);
+  system.addBody(
+      earth,
+      Vector3D(0, 1.47095e11, 0),
+      Vector3D(3.029e4, 0, 0),
+      0);
+
+  Body moon(31, 7.342e22);
+  system.addBody(
+      moon,
+      Vector3D(-3.626e8, 0, 0),
+      Vector3D(0, -1.022e3, 0),
+      3);
+
+  Body mars(4, 6.4171e23);
+  system.addBody(
+      mars,
+      Vector3D(2.067e11, 0, 0),
+      Vector3D(0, -2.650e4, 0),
+      0);
+
+  testEqual(system.getBody(0)->id(), 0UL);
+  testEqual(system.getBody(0)->mass(), 1.9885e30);
+
+  testEqual(system.getBody(3)->id(), 3UL);
+  testEqual(system.getBody(3)->mass(), 5.97237e24);
+
+  testEqual(system.getBody(31)->id(), 31UL);
+  testEqual(system.getBody(31)->mass(), 7.342e22);
+
+  testEqual(system.getBody(4)->id(), 4UL);
+  testEqual(system.getBody(4)->mass(), 6.4171e23);
 }
 
 
-
+}
