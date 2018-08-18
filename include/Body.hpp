@@ -12,13 +12,12 @@
 #ifndef GRAVITREE_BODY_HPP
 #define GRAVITREE_BODY_HPP
 
-#include "Position.hpp"
 #include "Vector3D.hpp"
 #include "Rotation.hpp"
 #include "Types.hpp"
 
 #include <memory>
-#include <string>
+#include <cstdint>
 
 namespace gravitree
 {
@@ -26,6 +25,8 @@ namespace gravitree
 class Body
 {
   public:
+    using id_type = uint64_t;
+
     /**
     * @brief Create a physics body.
     *
@@ -33,7 +34,7 @@ class Body
     * @param mass The mass of the body.
     */
     Body(
-        std::string name,
+        id_type id,
         kilo_type mass);
 
     /**
@@ -42,11 +43,11 @@ class Body
     virtual ~Body();
 
     /**
-    * @brief Get the name of this body.
+    * @brief Get the id of this body.
     *
-    * @return The name of this body.
+    * @return The id of this body.
     */
-    std::string name() const noexcept;
+    id_type id() const noexcept;
 
     /**
     * @brief Get the mass of the object.
@@ -71,7 +72,7 @@ class Body
         Rotation velocity) noexcept;
 
   private:
-    std::string m_name;
+    id_type m_id;
     kilo_type m_mass;
     Rotation m_angularVelocity;
 

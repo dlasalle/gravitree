@@ -85,7 +85,7 @@ class SolarSystem
       Body body,
       Vector3D position,
       Vector3D velocity,
-      std::string parent);
+      Body::id_type parent);
   
   /**
   * @brief Add a body with the specified orbit.
@@ -97,36 +97,36 @@ class SolarSystem
   void addBody(
       Body body,
       OrbitalState state,
-      std::string parent);
+      Body::id_type parent);
  
   /**
   * @brief Remove a body from the system.
   *
-  * @param name The name of the body.
+  * @param id The id of the body.
   */
   void removeBody(
-      std::string name);
+      Body::id_type id);
 
   /**
   * @brief Get the body with the given name.
   *
-  * @param name The body's name.
+  * @param id The body's id.
   *
   * @return The body.
   */
   Body getBody(
-      std::string const name) const;
+      Body::id_type id) const;
   
   /**
   * @brief Get the location of every body in the system relative to another. No
   * rotations are applied.
   *
-  * @param name The name of the body to use as the origin.
+  * @param body The body of the body to use as the origin.
   *
   * @return The pairs of bodies and relative positions.
   */
   std::vector<std::pair<Body const *, Vector3D>> getRelativeTo(
-      std::string name) const;
+      Body::id_type body) const;
 
   private:
   struct node_struct
@@ -138,7 +138,7 @@ class SolarSystem
   };
 
   second_type m_time;
-  std::map<std::string, std::unique_ptr<node_struct>> m_bodies;
+  std::map<Body::id_type, std::unique_ptr<node_struct>> m_bodies;
   node_struct * m_root;
 
   void getTreeRelativeTo(
