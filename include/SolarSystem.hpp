@@ -128,8 +128,24 @@ class SolarSystem
       Body::id_type id);
 
   /**
+  * @brief Get the position of the specified body relative to the other body.
+  * This takes O(d + log n) time, where d is the maximum depth of the tree, and
+  * n is the number of bodies in the tree.
+  *
+  * @param queryBody The body to get the relative position of.
+  * @param relativeRoot The body to use as the "root".
+  *
+  * @return The relative position.
+  */
+  Vector3D getBodyPositionRelativeTo(
+      Body::id_type queryBody,
+      Body::id_type relativeRoot) const;
+
+
+  /**
   * @brief Get the location of every body in the system relative to another. No
-  * rotations are applied.
+  * rotations are applied. This takes O(n) time where n is the number of bodies
+  * in the tree.
   *
   * @param body The body of the body to use as the origin.
   *
