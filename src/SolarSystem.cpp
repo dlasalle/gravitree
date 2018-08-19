@@ -110,16 +110,16 @@ Body * SolarSystem::getBody(
 }
 
 Vector3D SolarSystem::getBodyPositionRelativeTo(
-      Body::id_type queryBody,
-      Body::id_type relativeRoot) const
+      Body::id_type const queryBody,
+      Body::id_type const relativeRoot) const
 {
   node_struct const * const origin = m_bodies.at(relativeRoot).get();
   node_struct const * const destination = m_bodies.at(queryBody).get();
 
   // find the parent nodes 
   std::vector<std::pair<Body::id_type, Vector3D>> originParents;
-  node_struct const * parent = origin->parent;
-  Vector3D originOffset = origin->state.position();
+  node_struct const * parent = origin;
+  Vector3D originOffset;
   while (parent != nullptr) {
     originParents.emplace_back(parent->body.id(), originOffset);
     originOffset += parent->state.position(); 
@@ -127,8 +127,8 @@ Vector3D SolarSystem::getBodyPositionRelativeTo(
   }
 
   std::vector<std::pair<Body::id_type, Vector3D>> destinationParents;
-  parent = destination->parent;
-  Vector3D destinationOffset = destination->state.position();
+  parent = destination;
+  Vector3D destinationOffset;
   while (parent != nullptr) {
     destinationParents.emplace_back(parent->body.id(), destinationOffset);
     destinationOffset += parent->state.position(); 
@@ -144,8 +144,8 @@ Vector3D SolarSystem::getBodyPositionRelativeTo(
     ++i;
   }
 
-  return (*(originParents.end()-i)).second - \
-         (*(destinationParents.end()-i)).second;
+  return (*(destinationParents.end()-i)).second - \
+         (*(originParents.end()-i)).second;
 }
 
 std::vector<std::pair<Body const *, Vector3D>>
