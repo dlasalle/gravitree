@@ -245,5 +245,153 @@ UNITTEST(SolarSystem, GetBody)
   testEqual(system.getBody(4)->mass(), 6.4171e23);
 }
 
+UNITTEST(SolarSystem, GetPositionEarthRelativeToSun)
+{
+  Body sun(0, 1.9885e30);
+
+  SolarSystem system(sun);
+
+  Body earth(3, 5.97237e24);
+  system.addBody(
+      earth,
+      Vector3D(0, 1.47095e11, 0),
+      Vector3D(3.029e4, 0, 0),
+      0);
+
+  Body moon(31, 7.342e22);
+  system.addBody(
+      moon,
+      Vector3D(-3.626e8, 0, 0),
+      Vector3D(0, -1.022e3, 0),
+      3);
+
+  Body mars(4, 6.4171e23);
+  system.addBody(
+      mars,
+      Vector3D(2.067e11, 0, 0),
+      Vector3D(0, -2.650e4, 0),
+      0);
+
+  Vector3D pos = system.getBodyPositionRelativeTo(3, 0);
+
+  testNearEqual(pos.x(), 0.0, 1.0e-9, 1.0);
+  testNearEqual(pos.y(), 1.47095e11, 1.0e-9, 1.0);
+  testNearEqual(pos.z(), 0.0, 1.0e-9, 1.0);
+}
+
+UNITTEST(SolarSystem, GetPositionSunRelativeToEarth)
+{
+  Body sun(0, 1.9885e30);
+
+  SolarSystem system(sun);
+
+  Body earth(3, 5.97237e24);
+  system.addBody(
+      earth,
+      Vector3D(0, 1.47095e11, 0),
+      Vector3D(3.029e4, 0, 0),
+      0);
+
+  Body moon(31, 7.342e22);
+  system.addBody(
+      moon,
+      Vector3D(-3.626e8, 0, 0),
+      Vector3D(0, -1.022e3, 0),
+      3);
+
+  Body mars(4, 6.4171e23);
+  system.addBody(
+      mars,
+      Vector3D(2.067e11, 0, 0),
+      Vector3D(0, -2.650e4, 0),
+      0);
+
+  Vector3D pos = system.getBodyPositionRelativeTo(0, 3);
+
+  testNearEqual(pos.x(), 0.0, 1.0e-9, 1.0);
+  testNearEqual(pos.y(), -1.47095e11, 1.0e-9, 1.0);
+  testNearEqual(pos.z(), 0.0, 1.0e-9, 1.0);
+}
+
+UNITTEST(SolarSystem, GetPositionMarsRelativeToEarth)
+{
+  Body sun(0, 1.9885e30);
+
+  SolarSystem system(sun);
+
+  Body earth(3, 5.97237e24);
+  system.addBody(
+      earth,
+      Vector3D(0, 1.47095e11, 0),
+      Vector3D(3.029e4, 0, 0),
+      0);
+
+  Body mars(4, 6.4171e23);
+  system.addBody(
+      mars,
+      Vector3D(2.067e11, 0, 0),
+      Vector3D(0, -2.650e4, 0),
+      0);
+
+  Vector3D pos = system.getBodyPositionRelativeTo(4, 3);
+
+  testNearEqual(pos.x(), 2.067e11, 1.0e-9, 1.0);
+  testNearEqual(pos.y(), -1.47095e11, 1.0e-9, 1.0);
+  testNearEqual(pos.z(), 0.0, 1.0e-9, 1.0);
+}
+
+UNITTEST(SolarSystem, GetPositionMoonRelativeToEarth)
+{
+  Body sun(0, 1.9885e30);
+
+  SolarSystem system(sun);
+
+  Body earth(3, 5.97237e24);
+  system.addBody(
+      earth,
+      Vector3D(0, 1.47095e11, 0),
+      Vector3D(3.029e4, 0, 0),
+      0);
+
+  Body moon(31, 7.342e22);
+  system.addBody(
+      moon,
+      Vector3D(-3.626e8, 0, 0),
+      Vector3D(0, -1.022e3, 0),
+      3);
+
+  Vector3D pos = system.getBodyPositionRelativeTo(31, 3);
+
+  testNearEqual(pos.x(), -3.626e8, 1.0e-9, 1.0);
+  testNearEqual(pos.y(), 0.0, 1.0e-9, 1.0);
+  testNearEqual(pos.z(), 0.0, 1.0e-9, 1.0);
+}
+
+UNITTEST(SolarSystem, GetPositionEarthRelativeToMoon)
+{
+  Body sun(0, 1.9885e30);
+
+  SolarSystem system(sun);
+
+  Body earth(3, 5.97237e24);
+  system.addBody(
+      earth,
+      Vector3D(0, 1.47095e11, 0),
+      Vector3D(3.029e4, 0, 0),
+      0);
+
+  Body moon(31, 7.342e22);
+  system.addBody(
+      moon,
+      Vector3D(-3.626e8, 0, 0),
+      Vector3D(0, -1.022e3, 0),
+      3);
+
+  Vector3D pos = system.getBodyPositionRelativeTo(3, 31);
+
+  testNearEqual(pos.x(), 3.626e8, 1.0e-9, 1.0);
+  testNearEqual(pos.y(), 0.0, 1.0e-9, 1.0);
+  testNearEqual(pos.z(), 0.0, 1.0e-9, 1.0);
+}
 
 }
